@@ -8,12 +8,12 @@ The website features thoughtfully designed jewellery collections, product detail
 
 ## 🛍️ Website Features
 
-### 1. Home Page
-### 2. Shop / Collections
-### 3. Product Details
-### 4. Personalized Jewellery
-### 5. Shopping Cart
-### 6. Responsive Design
+#### 1. Home Page
+#### 2. Shop / Collections
+#### 3. Product Details
+#### 4. Personalized Jewellery
+#### 5. Shopping Cart
+#### 6. Responsive Design
 
 ## 💻 Technologies Used
 
