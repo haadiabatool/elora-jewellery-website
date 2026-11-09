@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jewlery-website</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- SITE HEADER -->
+<header class="site-header">
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar">
+    Complimentary shipping on orders above Rs. 5,000
+  </div>
+
+  <!-- Main Navigation Bar -->
+  <nav class="navbar">
+
+    <!-- Mobile / Tablet Menu Toggle -->
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Brand Logo -->
+    <a href="#" class="brand-logo">ÉLORA</a>
+
+    <!-- Navigation Links -->
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#collections">Collections</a></li>
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <!-- Right Utility Action Icons -->
+    <div class="nav-actions">
+
+      <!-- 1. SEARCH TRIGGER BUTTON (Yeh missing tha!) -->
+      <button class="icon-btn" id="searchTriggerBtn" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+
+      <!-- 2. Account Icon -->
+      <button class="icon-btn" aria-label="Account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </button>
+
+      <!-- 3. Cart / Shopping Bag Icon -->
+      <button class="icon-btn cart-btn" aria-label="Shopping Bag">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span class="cart-count">0</span>
+      </button>
+
+    </div>
+
+  </nav>
+</header>
+
+<!-- CART DRAWER / SHOPPING BAG OVERLAY -->
+<div class="cart-drawer-overlay" id="cartDrawerOverlay">
+  <div class="cart-drawer">
+    
+    <!-- Drawer Header -->
+    <div class="cart-drawer-header">
+      <h3 class="cart-drawer-title">Your Shopping Bag (<span id="cartItemCountTitle">0</span>)</h3>
+      <button class="cart-drawer-close" id="cartDrawerCloseBtn" aria-label="Close Bag">&times;</button>
+    </div>
+
+    <!-- Drawer Body (Items List) -->
+    <div class="cart-drawer-body" id="cartDrawerBody">
+      <!-- Empty Cart Message State (Default) -->
+      <div class="cart-empty-state" id="cartEmptyState">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <p>Your bag is currently empty.</p>
+        <a href="#bestsellers" class="btn-continue-shopping" id="btnContinueShopping">Explore Bestsellers</a>
+      </div>
+
+      <!-- Dynamic Cart Items Container -->
+      <div class="cart-items-list" id="cartItemsList"></div>
+    </div>
+
+    <!-- Drawer Footer (Subtotal & Checkout) -->
+<div class="cart-drawer-footer" id="cartDrawerFooter">
+  <div class="cart-subtotal-row">
+    <span>Subtotal</span>
+    <span class="cart-subtotal-price" id="cartSubtotal">Rs. 0</span>
+  </div>
+  <p class="cart-tax-note">Taxes and shipping calculated at checkout.</p>
+  
+  <!-- Updated onclick to trigger real checkout -->
+  <button class="btn-checkout" onclick="proceedCartToCheckout()">Proceed to Checkout</button>
+</div>
+
+  </div>
+</div>
+
+
+<!-- SEARCH OVERLAY MODAL (Yeh ab .nav-actions se bahar aur proper jagah par hai) -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-overlay-container">
+
+    <!-- Top Bar & Close Button -->
+    <div class="search-top-bar">
+      <span class="search-heading">Search ÉLORA Collections</span>
+      <button class="search-close-btn" id="searchCloseBtn" aria-label="Close search">&times;</button>
+    </div>
+
+    <!-- Search Input Box -->
+    <div class="search-input-wrapper">
+      <svg class="search-icon-input" width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Search for earrings, necklaces, rings, bracelets..."
+        autocomplete="off">
+    </div>
+
+    <!-- Quick Suggestions / Tags -->
+    <div class="search-suggestions-container" id="searchSuggestions">
+      <span class="suggestions-label">Popular Searches:</span>
+      <div class="suggestion-tags">
+        <button class="suggestion-tag" data-query="Pearl">Pearl</button>
+        <button class="suggestion-tag" data-query="Ring">Ring</button>
+        <button class="suggestion-tag" data-query="Necklace">Necklace</button>
+        <button class="suggestion-tag" data-query="Gold">Gold</button>
+        <button class="suggestion-tag" data-query="Bracelet">Bracelet</button>
+      </div>
+    </div>
+
+    <!-- Live Search Results Grid -->
+    <div class="search-results-grid" id="searchResultsGrid">
+      <!-- Dynamic search items will appear here -->
+    </div>
+
+  </div>
+</div>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section" id="home">
+    <div class="hero-container">
+
+      <!-- Left Column: Content -->
+      <div class="hero-content">
+        <span class="hero-tagline">Handcrafted with Love</span>
+
+        <h1 class="hero-title">
+          Little Details.<br>
+          <span class="highlight-text">Lasting Impressions.</span>
+        </h1>
+
+        <p class="hero-description">
+          Discover jewellery that celebrates your individuality. From delicate everyday essentials to statement pieces,
+          every design is thoughtfully handcrafted to make your moments more meaningful.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#collections" class="btn btn-primary">Shop Collection</a>
+          <a href="#story" class="btn btn-secondary">Discover Our Story</a>
+        </div>
+      </div>
+
+      <!-- Right Column: Editorial Visual (New Modern Minimalist Style) -->
+      <div class="hero-media">
+        <div class="editorial-wrapper">
+          <div class="image-frame">
+            <img src="assets\all-3.jpeg" alt="Handcrafted ÉLORA Gold Jewellery" loading="eager">
+          </div>
+          <!-- Decorative Border Accent -->
+          <div class="frame-accent-border"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 3: SHOP BY COLLECTION -->
+  <section class="collections-section" id="collections">
+    <div class="collections-container">
+
+      <!-- Section Header -->
+      <div class="section-header">
+        <p class="collection-eyebrow">Shop by collection</p>
+        <h2 class="section-title">Find Your Signature Piece.</h2>
+        <p class="section-description">
+          Explore thoughtfully handcrafted pieces designed to complement your everyday style and special moments.
+        </p>
+      </div>
+
+      <!-- Collections Grid (3 Cards) -->
+      <div class="collections-grid">
+
+        <!-- Card 1: Earrings -->
+        <div class="collection-card">
+          <div class="card-image-wrapper">
+            <img src="assets\earings\earing-15.jpeg" alt="Handcrafted Earrings Collection" loading="lazy">
+            <span class="card-badge">Collection</span>
+          </div>
+          <div class="card-content">
+            <h3 class="card-title">Earrings</h3>
+            <p class="card-text">Delicate details that make every look special.</p>
+            <a href="#earrings" class="card-cta">
+              <span>Explore Collection</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2: Necklaces -->
+        <div class="collection-card">
+          <div class="card-image-wrapper">
+            <img src="assets\neclace\neclace-9.jpeg" alt="Timeless Necklaces Collection" loading="lazy">
+            <span class="card-badge">Collection</span>
+          </div>
+          <div class="card-content">
+            <h3 class="card-title">Necklaces</h3>
+            <p class="card-text">Timeless pieces designed to stay close to your heart.</p>
+            <a href="#necklaces" class="card-cta">
+              <span>Explore Collection</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 3: Bracelets & Rings -->
+        <div class="collection-card">
+          <div class="card-image-wrapper">
+            <img src="assets\ring&braclets-2.jpeg" alt="Bracelets and Rings Collection" loading="lazy">
+            <span class="card-badge">Collection</span>
+          </div>
+          <div class="card-content">
+            <h3 class="card-title">Bracelets & Rings</h3>
+            <p class="card-text">Little expressions of personality and style.</p>
+            <a href="#bracelets-rings" class="card-cta">
+              <span>Explore Collection</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 4: BESTSELLERS -->
+ <section class="bestsellers-section" id="bestsellers">
+  <div class="bestsellers-container">
+
+    <!-- Section Header -->
+    <div class="section-header">
+      <p class="bestseller-eyebrow">Bestsellers</p>
+      <h2 class="section-title">Loved for a Reason.</h2>
+      <p class="section-description">
+        Meet the handcrafted favourites our customers love to wear and gift.
+      </p>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="bestsellers-grid" id="bestsellersGrid">
+
+      <!-- Product 1 (Visible) -->
+      <article class="product-card">
+        <div class="product-media"><img src="assets/earings/earing-14.jpeg" alt="Pearl Glow Earrings" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Pearl Glow Earrings</h3><span class="product-price">Rs. 1,850</span></div>
+            <p class="product-desc">A graceful combination of delicate pearls and golden details, made to add elegance.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-1', 'Pearl Glow Earrings')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-1', 'Pearl Glow Earrings')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 2 (Visible) -->
+      <article class="product-card">
+        <div class="product-media"><img src="assets/neclace/neclace.jpeg" alt="Golden Heart Necklace" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Golden Heart Necklace</h3><span class="product-price">Rs. 2,400</span></div>
+            <p class="product-desc">A meaningful little statement with a timeless heart pendant, perfect for gifting.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-2', 'Golden Heart Necklace')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-2', 'Golden Heart Necklace')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 3 (Visible) -->
+      <article class="product-card">
+        <div class="product-media"><img src="assets/braclets/braclet-1.jpeg" alt="Everyday Gold Bracelet" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Everyday Gold Bracelet</h3><span class="product-price">Rs. 1,600</span></div>
+            <p class="product-desc">A simple and versatile bracelet designed to bring effortless elegance to daily style.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-3', 'Everyday Gold Bracelet')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-3', 'Everyday Gold Bracelet')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 4 (Visible) -->
+      <article class="product-card">
+        <div class="product-media"><img src="assets/rings.jpeg" alt="Golden Touch Ring" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Golden Touch Ring</h3><span class="product-price">Rs. 1,350</span></div>
+            <p class="product-desc">A delicate handcrafted ring that proves even the smallest details make impressions.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-4', 'Golden Touch Ring')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-4', 'Golden Touch Ring')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 5 (Visible) -->
+      <article class="product-card">
+        <div class="product-media"><img src="assets/earings/earings.jpeg" alt="Celestial Studs" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Celestial Stud Earrings</h3><span class="product-price">Rs. 1,550</span></div>
+            <p class="product-desc">Inspired by night skies, featuring subtle shimmer for a timeless charm.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-5', 'Celestial Stud Earrings')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-5', 'Celestial Stud Earrings')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 6 (Visible) -->
+      <article class="product-card">
+        <div class="product-media"><img src="assets/neclace/neclace-10.jpeg" alt="Rose Bloom Pendant" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Rose Bloom Pendant</h3><span class="product-price">Rs. 2,650</span></div>
+            <p class="product-desc">Hand-sculpted petal textures suspended from a fluid gold-toned chain.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-6', 'Rose Bloom Pendant')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-6', 'Rose Bloom Pendant')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 7 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/rings-5.jpeg" alt="Minimalist Band Ring" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Minimalist Band Ring</h3><span class="product-price">Rs. 1,200</span></div>
+            <p class="product-desc">A polished, ultra-slim band designed to wear alone or stack seamlessly.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-7', 'Minimalist Band Ring')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-7', 'Minimalist Band Ring')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 8 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/braclets/braclet-2.jpeg" alt="Solstice Cuff Bracelet" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Solstice Cuff Bracelet</h3><span class="product-price">Rs. 2,100</span></div>
+            <p class="product-desc">Softly textured open cuff crafted to elevate daily outfits effortlessly.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-8', 'Solstice Cuff Bracelet')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-8', 'Solstice Cuff Bracelet')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 9 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/neclace/neclace-8.jpeg" alt="Vintage Pearl Drops" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Vintage Pearl Drops</h3><span class="product-price">Rs. 2,250</span></div>
+            <p class="product-desc">Organic freshwater pearls linked with delicate brushed gold hoops.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-9', 'Vintage Pearl Drops')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-9', 'Vintage Pearl Drops')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 10 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/neclace/neclace-7.jpeg" alt="Filigree Choker" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Filigree Gold Choker</h3><span class="product-price">Rs. 3,100</span></div>
+            <p class="product-desc">Intricate handcrafted lace motifs designed to sit comfortably at the neckline.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-10', 'Filigree Gold Choker')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-10', 'Filigree Gold Choker')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 11 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/neclace/neclace-6.jpeg" alt="Embossed Coin Necklace" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Embossed Coin Necklace</h3><span class="product-price">Rs. 2,800</span></div>
+            <p class="product-desc">A classic heirloom-inspired medallion detailing subtle floral engravings.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-11', 'Embossed Coin Necklace')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-11', 'Embossed Coin Necklace')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 12 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/ring-3.jpeg" alt="Radiant Gem Ring" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Radiant Gem Ring</h3><span class="product-price">Rs. 1,950</span></div>
+            <p class="product-desc">Hand-set champagne zirconia stone on a slim handcrafted rose gold band.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-12', 'Radiant Gem Ring')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-12', 'Radiant Gem Ring')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 13 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/ring&braclets-4.jpeg" alt="Threaded Gold Hoop" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Threaded Gold Hoops</h3><span class="product-price">Rs. 1,450</span></div>
+            <p class="product-desc">Lightweight textured hoops tailored for comfortable, all-day wearability.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-13', 'Threaded Gold Hoops')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-13', 'Threaded Gold Hoops')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 14 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/rings&braclet-7.jpeg" alt="Twisted Chain Bracelet" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Twisted Chain Bracelet</h3><span class="product-price">Rs. 1,750</span></div>
+            <p class="product-desc">Interlocking fluid links reflecting light with every subtle movement.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-14', 'Twisted Chain Bracelet')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-14', 'Twisted Chain Bracelet')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 15 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/ring-4.jpeg" alt="Serene Pearl Ring" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Serene Pearl Ring</h3><span class="product-price">Rs. 1,650</span></div>
+            <p class="product-desc">A single luminous freshwater pearl balanced on an open gold wire frame.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-15', 'Serene Pearl Ring')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-15', 'Serene Pearl Ring')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 16 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/neclace&ring-1.jpeg" alt="Horizon Lariat Necklace" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Horizon Lariat Necklace</h3><span class="product-price">Rs. 2,900</span></div>
+            <p class="product-desc">A modern drop necklace adding elongation and refined sophistication.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-16', 'Horizon Lariat Necklace')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-16', 'Horizon Lariat Necklace')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 17 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/neclace&ring-2.jpeg" alt="Blush Rose Studs" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Blush Rose Studs</h3><span class="product-price">Rs. 1,300</span></div>
+            <p class="product-desc">Warm rose gold studs subtly shaped into minimalist geometric silhouettes.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-17', 'Blush Rose Studs')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-17', 'Blush Rose Studs')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 18 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/rings-5.jpeg" alt="Intertwined Gold Ring" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Intertwined Gold Ring</h3><span class="product-price">Rs. 1,800</span></div>
+            <p class="product-desc">Dual overlapping bands symbolizing connection and everlasting beauty.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-18', 'Intertwined Gold Ring')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-18', 'Intertwined Gold Ring')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 19 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/neclace/neclace-5.jpeg" alt="Aura Charm Anklet" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">Aura Charm Anklet</h3><span class="product-price">Rs. 1,500</span></div>
+            <p class="product-desc">Delicate chain anklet featuring tiny dangling antique gold discs.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-19', 'Aura Charm Anklet')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-19', 'Aura Charm Anklet')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 20 (Hidden initially) -->
+      <article class="product-card is-hidden">
+        <div class="product-media"><img src="assets/all-4.jpeg" alt="ÉLORA Signature Set" loading="lazy"></div>
+        <div class="product-details">
+          <div class="product-info-head">
+            <div class="product-header-flex"><h3 class="product-title">ÉLORA Signature Set</h3><span class="product-price">Rs. 4,200</span></div>
+            <p class="product-desc">Our flagship handcrafted necklace paired with matching pearl drop studs.</p>
+          </div>
+          <div class="product-footer">
+            <button class="btn-add-bag" onclick="addToCart('p-20', 'ÉLORA Signature Set')">Add to Bag</button>
+            <button class="btn-order-now" onclick="orderNow('p-20', 'ÉLORA Signature Set')">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Load More Button Area -->
+    <div class="load-more-wrapper">
+      <button class="btn-view-more" id="btnViewMore">
+        <span>View More Jewellery</span>
+        <span class="product-count-badge" id="productCountBadge">(6 of 20)</span>
+      </button>
+    </div>
+
+  </div>
+</section>
+
+  <!-- SECTION 5: WHY CHOOSE ÉLORA -->
+  <section class="why-choose-section" id="why-choose">
+    <div class="why-choose-container">
+
+      <!-- Section Header -->
+      <div class="section-header">
+        <p class="why-choose-eyebrow">Why choose ÉLORA?</p>
+        <h2 class="section-title">Made with Intention. Worn with Love.</h2>
+      </div>
+
+      <!-- 4-Column Grid -->
+      <div class="why-choose-grid">
+
+        <!-- Feature 1: Handcrafted with Care -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <!-- Sparkle / Handcrafted Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+              </path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Handcrafted with Care</h3>
+          <p class="feature-desc">Every piece is thoughtfully created with attention to the smallest details.</p>
+        </div>
+
+        <!-- Feature 2: Unique Designs -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <!-- Diamond / Unique Design Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">Unique Designs</h3>
+          <p class="feature-desc">Discover designs that feel personal, timeless, and different.</p>
+        </div>
+
+        <!-- Feature 3: Thoughtful Packaging -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <!-- Package Box Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path
+                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+              </path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Thoughtful Packaging</h3>
+          <p class="feature-desc">Every order is prepared with care, making each unboxing feel special.</p>
+        </div>
+
+        <!-- Feature 4: Made for Gifting -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <!-- Gift Box Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polyline points="20 12 20 22 4 22 4 12"></polyline>
+              <rect x="2" y="7" width="20" height="5"></rect>
+              <line x1="12" y1="22" x2="12" y2="7"></line>
+              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Made for Gifting</h3>
+          <p class="feature-desc">Find meaningful pieces for birthdays, celebrations, and everyday surprises.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 6: OUR STORY (Redesigned Images) -->
+  <section class="our-story-section" id="story">
+    <div class="story-container">
+
+      <!-- Left Column: Story Content -->
+      <div class="story-content">
+        <span class="story-tagline">OUR STORY</span>
+
+        <h2 class="story-title">More Than Jewellery.<br>A Little Piece of You.</h2>
+
+        <p class="story-description">
+          ÉLORA began with a simple love for beautiful details and the art of creating something by hand. We believe
+          jewellery is more than an accessory; it can hold memories, express individuality, and make ordinary moments
+          feel special.
+        </p>
+
+        <p class="story-description">
+          Every piece is thoughtfully designed with a focus on creativity, simplicity, and craftsmanship. Our aim is to
+          create jewellery that feels personal, meaningful, and worth keeping.
+        </p>
+
+        <div class="story-signature">
+          <span>Handcrafted with devotion</span>
+          <div class="signature-line"></div>
+        </div>
+      </div>
+
+      <!-- Right Column: New Unique 3-Image Mosaic Layout -->
+      <div class="story-gallery-mosaic">
+
+        <!-- Top Wide Image -->
+        <div class="mosaic-item item-top">
+          <img src="assets\neclace&ring-1.jpeg" alt="Handcrafting Jewellery Process" loading="lazy">
+        </div>
+
+        <!-- Bottom Left Square Image -->
+        <div class="mosaic-item item-left">
+          <img src="assets\ring-2.jpeg" alt="Delicate Jewellery Detail" loading="lazy">
+        </div>
+
+        <!-- Bottom Right Vertical Image with Gold Accent Frame -->
+        <div class="mosaic-item item-right">
+          <img src="assets\earings\earing-13.jpeg" alt="Artisan Craftsmanship" loading="lazy">
+          <div class="mosaic-gold-frame"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+<!-- SECTION: PERSONALISED JEWELLERY (ÉLORA CUSTOM STUDIO) -->
+<section class="custom-studio-section" id="custom-studio">
+  <div class="custom-studio-container">
+
+    <!-- Center Column: Customization Controls -->
+    <div class="custom-studio-content">
+      <span class="studio-tagline">ÉLORA CUSTOM STUDIO</span>
+      <h2 class="studio-title">Made Just for You.</h2>
+      <p class="studio-description">
+        Some things are even more special when they're personal. Create a meaningful piece with custom initials,
+        names, or thoughtful details designed especially for you.
+      </p>
+
+      <form class="customizer-form" id="customizerForm">
+
+        <!-- Step 1: Choose Jewellery Type -->
+        <div class="form-step">
+          <label class="step-label" for="jewelleryType">Choose your jewellery</label>
+          <select id="jewelleryType" class="custom-select">
+            <option value="necklace">Name Necklace</option>
+            <option value="bracelet">Name Bracelet</option>
+            <option value="ring">Custom Name Ring</option>
+            <option value="birthstone">Birthstone Jewellery</option>
+          </select>
+        </div>
+
+        <!-- Conditional Field: Gemstone Selection -->
+        <div class="form-step is-hidden" id="gemstoneStep">
+          <label class="step-label" for="gemstoneSelect">Choose your birthstone</label>
+          <select id="gemstoneSelect" class="custom-select">
+            <option value="emerald">Emerald Green</option>
+            <option value="ruby">Ruby Red</option>
+            <option value="sapphire">Royal Sapphire </option>
+            <option value="diamond">Crystal Diamond </option>
+          </select>
+        </div>
+
+        <!-- Step 2: Enter Name -->
+        <div class="form-step">
+          <label class="step-label" for="customName">Enter your name or initials</label>
+          <input type="text" id="customName" class="custom-input" placeholder="e.g., Saba" maxlength="12" autocomplete="off">
+        </div>
+
+        <!-- Step 3: Select Metal Colour -->
+        <div class="form-step">
+          <label class="step-label">Select metal colour</label>
+          <div class="metal-options">
+            <button type="button" class="metal-btn active" data-color="Gold">
+              <span class="color-dot gold-dot"></span> Gold
+            </button>
+            <button type="button" class="metal-btn" data-color="Silver">
+              <span class="color-dot silver-dot"></span> Silver
+            </button>
+            <button type="button" class="metal-btn" data-color="Rose Gold">
+              <span class="color-dot rose-dot"></span> Rose Gold
+            </button>
+          </div>
+        </div>
+
+        <!-- CTA Button -->
+        <button type="button" class="btn-create-piece" id="btnOrderCustomPiece">Create & Order Your Piece</button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+  <!-- SECTION 8: CUSTOMER REVIEWS -->
+  <section class="reviews-section" id="reviews">
+    <div class="reviews-container">
+
+      <!-- Section Header -->
+      <div class="section-header">
+        <p class="review-tagline">Customer reviews</p>
+        <h2 class="section-title">Little Pieces, Lovely Stories.</h2>
+        <p class="section-description">
+          Read how our customers bring their favorite moments to life with ÉLORA.
+        </p>
+      </div>
+
+      <!-- 3-Column Reviews Grid -->
+      <div class="reviews-grid">
+
+        <!-- Review 1 -->
+        <div class="review-card">
+          <div class="review-stars">
+            ★★★★★
+          </div>
+          <p class="review-text">
+            "The earrings are even more beautiful in person. I loved the packaging and the attention to detail."
+          </p>
+          <div class="reviewer-info">
+            <h4 class="reviewer-name">Ayesha K.</h4>
+            <span class="verified-badge">Verified Buyer</span>
+          </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="review-card">
+          <div class="review-stars">
+            ★★★★★
+          </div>
+          <p class="review-text">
+            "I ordered a personalised necklace for my sister, and it turned out so lovely. Such a thoughtful gift!"
+          </p>
+          <div class="reviewer-info">
+            <h4 class="reviewer-name">Sarah M.</h4>
+            <span class="verified-badge">Verified Buyer</span>
+          </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="review-card">
+          <div class="review-stars">
+            ★★★★★
+          </div>
+          <p class="review-text">
+            "Absolute perfection! The quality of the gold bracelet feels so premium for everyday wear. Will definitely
+            order again."
+          </p>
+          <div class="reviewer-info">
+            <h4 class="reviewer-name">Zainab R.</h4>
+            <span class="verified-badge">Verified Buyer</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION FREQUENTLY ASKED QUESTIONS -->
+  <section class="faqs-section" id="faqs">
+    <div class="faqs-container">
+
+      <!-- Section Header -->
+      <div class="section-header">
+        <span class="faqs-tagline">GOT QUESTIONS?</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-description">
+          Everything you need to know about our handcrafted pieces, orders, and custom designs.
+        </p>
+      </div>
+
+      <!-- Accordion Wrapper -->
+      <div class="accordion-wrapper">
+
+        <!-- FAQ 1 -->
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Are ÉLORA jewellery pieces tarnish-resistant?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes, all our jewellery pieces are handcrafted using high-grade stainless steel and brass base metals
+              plated in 18k antique gold and silver. They are designed for everyday durability and tarnish-resistant
+              wear.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How long does a personalised custom piece take to make?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Since each custom piece (Name Necklaces, Initials, Birthstone items) is hand-engraved with intention,
+              crafting takes 3–5 business days before dispatch.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>What are your delivery charges and shipping timelines?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>We offer free standard shipping on all orders over Rs. 3,000. Nationwide delivery typically takes 3 to 5
+              working days after order dispatch.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Can I order ÉLORA jewellery as a gift?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Absolutely! Every ÉLORA order comes packaged in our signature soft beige velvet pouch and hard gift box,
+              ready for gifting with an optional handwritten note.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>What is your exchange and return policy?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>We offer a hassle-free 7-day exchange window for standard collections if the item is unused and in its
+              original packaging. Custom/personalised items are non-refundable unless damaged upon delivery.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION CONTACT US -->
+  <section class="contact-section" id="contact">
+    <div class="contact-container">
+
+      <!-- Left Column: Contact Form -->
+      <div class="contact-form-wrapper">
+        <span class="contact-tagline">GET IN TOUCH</span>
+        <h2 class="contact-title">We’d Love to Hear From You</h2>
+        <p class="contact-subtext">Have a question about an order, customisation, or just want to say hello? Send us a
+          message.</p>
+
+        <form class="contact-form" onsubmit="event.preventDefault();">
+          <div class="form-group">
+            <label for="contactName">Your Name</label>
+            <input type="text" id="contactName" placeholder="e.g. Ayesha Khan" required>
+          </div>
+          <div class="form-group">
+            <label for="contactEmail">Email Address or Phone</label>
+            <input type="text" id="contactEmail" placeholder="e.g. ayesha@example.com or 0300 1234567" required>
+          </div>
+          <div class="form-group">
+            <label for="contactMessage">Message</label>
+            <textarea id="contactMessage" rows="4" placeholder="How can we help you today?" required></textarea>
+          </div>
+          <button type="submit" class="btn-send-message">Send Message</button>
+        </form>
+      </div>
+
+      <!-- Right Column: Contact Information Cards -->
+      <div class="contact-info-wrapper">
+
+        <!-- Card 1: Location -->
+        <div class="info-card">
+          <div class="info-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </div>
+          <div class="info-details">
+            <h4>Studio & Flagship Store</h4>
+            <p>ÉLORA Artisan Studio, Block 4, Gulberg III, Lahore, Pakistan</p>
+          </div>
+        </div>
+
+        <!-- Card 2: Phone & WhatsApp -->
+        <div class="info-card">
+          <div class="info-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+              </path>
+            </svg>
+          </div>
+          <div class="info-details">
+            <h4>Phone & WhatsApp</h4>
+            <p>+92 (300) 123-4567<br>+92 (42) 3578-9012</p>
+          </div>
+        </div>
+
+        <!-- Card 3: Email -->
+        <div class="info-card">
+          <div class="info-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <div class="info-details">
+            <h4>Customer Care Email</h4>
+            <p>hello@elorajewellery.com<br>support@elorajewellery.com</p>
+          </div>
+        </div>
+
+        <!-- Card 4: Working Hours -->
+        <div class="info-card">
+          <div class="info-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="info-details">
+            <h4>Studio Hours</h4>
+            <p>Monday – Saturday: 11:00 AM – 8:00 PM<br>Sunday: Closed</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER SECTION -->
+  <footer class="site-footer">
+    <div class="footer-container">
+
+      <!-- Brand Column -->
+      <div class="footer-brand-col">
+        <a href="#" class="footer-logo">ÉLORA</a>
+        <p class="footer-tagline">
+          Elegance in Every Detail. Handcrafted with love and intention to make your everyday moments memorable.
+        </p>
+        <!-- Social Media Links -->
+        <div class="social-links">
+          <a href="#" class="social-icon" aria-label="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="Pinterest">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <path d="M8 9a4 4 0 0 1 8 0c0 3-2 5-4 7"></path>
+            </svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="Facebook">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Links Column 1: Shop -->
+      <div class="footer-links-col">
+        <h4 class="footer-col-title">Shop</h4>
+        <ul class="footer-links">
+          <li><a href="#bestsellers">Earrings</a></li>
+          <li><a href="#bestsellers">Necklaces</a></li>
+          <li><a href="#bestsellers">Bracelets</a></li>
+          <li><a href="#bestsellers">Rings</a></li>
+        </ul>
+      </div>
+
+      <!-- Links Column 2: Information -->
+      <div class="footer-links-col">
+        <h4 class="footer-col-title">Information</h4>
+        <ul class="footer-links">
+          <li><a href="#story">Our Story</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#faqs">FAQs</a></li>
+          <li><a href="#shipping">Shipping & Returns</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Footer Bottom Bar -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-container">
+        <p class="copyright-text">Copyright © 2026 ÉLORA. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FULL SCREEN COLLECTION VIEW SECTION -->
+  <div class="collection-fullscreen-view" id="collectionModal">
+    <div class="collection-view-container">
+
+      <!-- Top Bar with Back/Close Button -->
+      <div class="collection-view-topbar">
+        <button class="btn-back-to-home" id="modalCloseBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Back to Homepage</span>
+        </button>
+        <span class="view-brand-title">ÉLORA COLLECTIONS</span>
+      </div>
+
+      <!-- Collection Header -->
+      <div class="collection-view-header">
+        <h1 class="collection-view-title" id="modalCategoryTitle">Collection Title</h1>
+        <p class="collection-view-desc" id="modalCategoryDesc">Explore our handcrafted pieces.</p>
+      </div>
+
+      <!-- 10 Products Grid (Full Screen Layout) -->
+      <div class="collection-products-grid" id="modalProductsGrid">
+        <!-- Dynamic products injected here via JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 1. USER PROFILE & AUTHENTICATION MODAL -->
+<div class="user-modal-overlay" id="userModalOverlay">
+  <div class="user-modal-card">
+    <button class="modal-close-btn" id="userModalCloseBtn">&times;</button>
+    
+    <!-- AUTHENTICATION VIEW (Default if not logged in) -->
+    <div id="authView" class="auth-view">
+      <h3 class="auth-title">Welcome to ÉLORA</h3>
+      <p class="auth-subtitle">Sign in to view your orders and quick checkout</p>
+      
+      <form id="loginForm" class="auth-form" onsubmit="handleUserAuth(event)">
+        <div class="input-group">
+          <label>Full Name</label>
+          <input type="text" id="userNameInput" placeholder="Enter your full name" required>
+        </div>
+        <div class="input-group">
+          <label>Email Address</label>
+          <input type="email" id="userEmailInput" placeholder="name@example.com" required>
+        </div>
+        <button type="submit" class="btn-submit-auth">Create Account & Continue</button>
+      </form>
+    </div>
+
+    <!-- PROFILE & DASHBOARD VIEW (Shown when logged in) -->
+    <div id="profileView" class="profile-view" style="display: none;">
+      <div class="user-profile-header">
+        <div class="user-avatar" id="avatarInitial">S</div>
+        <div>
+          <h3 class="profile-name" id="displayUserName">Sajjad</h3>
+          <p class="profile-email" id="displayUserEmail">sajjad@example.com</p>
+        </div>
+        <button class="btn-logout" onclick="handleLogout()">Logout</button>
+      </div>
+
+      <div class="profile-tabs">
+        <span class="tab-title">Order History & Tracking</span>
+      </div>
+
+      <!-- Active Orders List -->
+      <div class="orders-history-container" id="ordersHistoryList">
+        <!-- Dynamic Orders Render Here -->
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 2. CHECKOUT ORDER MODAL -->
+<div class="checkout-modal-overlay" id="checkoutModalOverlay">
+  <div class="checkout-modal-card">
+    <button class="modal-close-btn" id="checkoutCloseBtn">&times;</button>
+    
+    <div class="checkout-header">
+      <h3 class="checkout-title">Complete Your Order</h3>
+      <p class="checkout-subtitle">ÉLORA Luxury Express Delivery</p>
+    </div>
+
+    <!-- Selected Product Summary -->
+    <div class="checkout-product-summary" id="checkoutProductSummary">
+      <!-- Injected dynamically -->
+    </div>
+
+    <!-- Shipping Details Form -->
+    <form id="checkoutForm" class="checkout-form" onsubmit="processFinalOrder(event)">
+      <div class="input-group">
+        <label>Full Name</label>
+        <input type="text" id="shipName" placeholder="Your full name" required>
+      </div>
+      <div class="input-group">
+        <label>Phone Number</label>
+        <input type="tel" id="shipPhone" placeholder="0300 1234567" required>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>City</label>
+          <input type="text" id="shipCity" placeholder="Lahore, Karachi, etc." required>
+        </div>
+        <div class="input-group">
+          <label>Payment Method</label>
+          <select id="shipPayment">
+            <option value="Cash on Delivery">Cash on Delivery (COD)</option>
+            <option value="Bank Transfer">Direct Bank Transfer</option>
+          </select>
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Complete Delivery Address</label>
+        <textarea id="shipAddress" rows="2" placeholder="House no, Street, Area..." required></textarea>
+      </div>
+
+      <button type="submit" class="btn-confirm-order">Confirm & Place Order</button>
+    </form>
+  </div>
+</div>
+
+  <script src="script.js"></script>
+  <script src="personalized-jewellery.js"></script>
+  <script src="explore-collection.js"></script>
+  <script src="search-icon.js"></script>
+  <script src="add-to-bag.js"></script>
+  <script src="order-now.js"></script>
+</body>
+
+</html>
